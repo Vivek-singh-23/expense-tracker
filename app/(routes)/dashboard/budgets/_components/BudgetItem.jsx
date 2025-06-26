@@ -4,7 +4,12 @@ import React from "react";
 
 function Budgetitem({ budget }) {
   const calculateProgressPerc = () => {
-    const perc = (budget.totalSpend / budget.amount) * 100;
+    let perc = (budget.totalSpend / budget.amount) * 100;
+
+    if(perc > 100){
+      perc = 100.00;
+    }
+
     return perc.toFixed(2);
   };
   return (
@@ -30,18 +35,19 @@ function Budgetitem({ budget }) {
             <h2 className="text-xs text-slate-400 ">
               ${budget.totalSpend ? budget.totalSpend : 0} Spend
             </h2>
-            <h2 className="text-xs text-slate-400 ">
-              ${budget.amount - budget.totalSpend} Remaining
+            <h2 className={`text-xs ${budget.amount - budget.totalSpend < 0 ? "text-red-500" : "text-slate-400"} `}>
+              ${Math.abs(budget.amount - budget.totalSpend)}{" "}{budget.amount - budget.totalSpend < 0 ? "Over Expended" : "Remaining"}
             </h2>
           </div>
 
           <div className="w-full bg-slate-300 h-2 rounded-full">
             <div
-              className=" bg-primary h-2 rounded-full"
+              className={`h-2 rounded-full ${parseFloat(calculateProgressPerc()) === 100 ? "bg-red-500" : "bg-primary"}`}
               style={{
                 width: `${calculateProgressPerc()}%`,
               }}
             ></div>
+
           </div>
         </div>
       </div>
